@@ -37,12 +37,161 @@
       padding: 20px;
     }
 
-    h1 {
-      font-size: 18px;
-      font-weight: 500;
-      color: #a0c4ff;
-      margin-bottom: 16px;
+    /* Intro 관련 CSS code */
+    /* 오버레이 전체 */
+    #intro-overlay {
+      position: fixed;
+      inset: 0;
+      background: #0a0d18;
+      z-index: 999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Segoe UI', 'Malgun Gothic', sans-serif;
+    }
+    #intro-overlay.hidden { display: none; }
+
+    /* 단계 전환 */
+    .intro-step { width: 100%; display: flex; justify-content: center; padding: 20px; }
+    .intro-step.hidden { display: none; }
+
+    /* 카드 */
+    .intro-card {
+      background: #10142a;
+      border: 1px solid #1e2d6e;
+      border-radius: 16px;
+      padding: 40px 36px;
+      max-width: 480px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      box-shadow: 0 0 60px rgba(30, 50, 120, 0.3);
+      animation: cardIn 0.5s ease forwards;
+    }
+    .intro-card.wide { max-width: 580px; }
+
+    @keyframes cardIn {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* 뱃지 */
+    .intro-warning-badge {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 700;
       letter-spacing: 2px;
+      color: #f09595;
+      border: 1px solid #f09595;
+      border-radius: 4px;
+      padding: 3px 10px;
+      width: fit-content;
+    }
+    .intro-warning-badge.story { color: #a0c4ff; border-color: #a0c4ff; }
+    .intro-warning-badge.name  { color: #5dcaa5; border-color: #5dcaa5; }
+
+    /* 타이틀 */
+    .intro-title {
+      font-size: 22px;
+      font-weight: 600;
+      color: #e0e0e0;
+      margin: 0;
+      line-height: 1.3;
+    }
+
+    /* 설명 */
+    .intro-desc {
+      font-size: 14px;
+      color: #8090b0;
+      line-height: 1.8;
+      margin: 0;
+    }
+    .intro-highlight { color: #a0c4ff; font-weight: 500; }
+    .intro-sub { font-size: 11px; color: #4a5a7a; }
+
+    /* 입력창 */
+    .intro-input-wrap {
+      display: flex;
+      gap: 8px;
+    }
+    .intro-input-wrap input {
+      flex: 1;
+      background: #0d1117;
+      border: 1px solid #1e2d6e;
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-size: 13px;
+      color: #e0e0e0;
+      font-family: 'Courier New', monospace;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .intro-input-wrap input:focus { border-color: #a0c4ff; }
+    .intro-input-wrap input::placeholder { color: #2a3a5a; }
+    .intro-input-wrap button {
+      background: rgba(160, 196, 255, 0.1);
+      border: 1px solid #a0c4ff;
+      border-radius: 10px;
+      padding: 10px 18px;
+      font-size: 13px;
+      color: #a0c4ff;
+      cursor: pointer;
+      font-family: inherit;
+      transition: background 0.2s;
+      white-space: nowrap;
+    }
+    .intro-input-wrap button:hover { background: rgba(160, 196, 255, 0.2); }
+
+    /* 링크 힌트 */
+    .intro-link-hint {
+      font-size: 11px;
+      color: #4a5a7a;
+      margin: 0;
+    }
+    .intro-link-hint a { color: #6c8ebf; }
+
+    /* 스토리 텍스트 */
+    .story-text-wrap {
+      min-height: 120px;
+      display: flex;
+      align-items: flex-start;
+    }
+    .story-line {
+      font-size: 15px;
+      color: #c0cce0;
+      line-height: 2;
+      margin: 0;
+      white-space: pre-wrap;
+    }
+
+    /* 다음 버튼 */
+    .intro-next-btn {
+      background: rgba(160, 196, 255, 0.1);
+      border: 1px solid #a0c4ff;
+      border-radius: 10px;
+      padding: 10px 24px;
+      font-size: 13px;
+      color: #a0c4ff;
+      cursor: pointer;
+      font-family: inherit;
+      align-self: flex-end;
+      transition: background 0.2s;
+      animation: fadeIn 0.5s ease;
+    }
+    .intro-next-btn:hover { background: rgba(160, 196, 255, 0.2); }
+
+    /* 페이드인 애니메이션 */
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    /* shake 애니메이션 */
+    @keyframes shake {
+      0%,100% { transform: translateX(0); }
+      25% { transform: translateX(-6px); }
+      75% { transform: translateX(6px); }
     }
 
     /* ── 블루미르 홀 : 푸앙이의 방 컨테이너 (기본 숨김) ── */
@@ -687,10 +836,79 @@
 
   <script src="config.js"></script>
 </head>
+
 <body>
+<!-- ================================================================
+     인트로 화면
+================================================================ -->
+<!-- 인트로 오버레이 (전체 화면) -->
+<div id="intro-overlay">
 
-<h1> CAU RPG — 중앙대 이면 세계 </h1>  <!-- 대제목 -->
+  <!-- 1단계: API 키 입력 -->
+  <div class="intro-step" id="step-api">
+    <div class="intro-card">
+      <div class="intro-warning-badge">⚠ SYSTEM ALERT</div>
+      <h2 class="intro-title">이면 세계 접속 감지</h2>
+      <p class="intro-desc">
+        이 게임은 <span class="intro-highlight">Groq LLM</span>을 기반으로 작동합니다.<br>
+        접속을 위해 Groq API 키를 입력하세요.<br>
+        <span class="intro-sub">키는 브라우저에만 저장되며 외부로 전송되지 않습니다.</span>
+      </p>
+      <div class="intro-input-wrap">
+        <input
+          type="password"
+          id="api-key-input"
+          placeholder="gsk_..."
+          autocomplete="off"
+          spellcheck="false"
+        />
+        <button id="api-key-btn" onclick="submitApiKey()">접속 ▶</button>
+      </div>
+      <p class="intro-link-hint">
+        키가 없으신가요? →
+        <a href="https://console.groq.com" target="_blank">console.groq.com</a>
+        에서 무료 발급
+      </p>
+    </div>
+  </div>
 
+  <!-- 2단계: 메인 스토리 소개 (추가 필요) -->
+  <div class="intro-step hidden" id="step-story">
+    <div class="intro-card wide">
+      <div class="intro-warning-badge story">RECORD 000-1</div>
+      <div class="story-text-wrap">
+        <p class="story-line" id="story-text"></p>
+      </div>
+      <button class="intro-next-btn" id="story-next-btn" onclick="goToNameStep()" style="display:none;">
+        계속 ▶
+      </button>
+    </div>
+  </div>
+
+  <!-- 3단계: 주인공 캐릭터 선정 (남캐 or 여캐) -->
+  <!-- 남캐 or 여캐 선택하는 창은 나중에 따로 구현해주세요 -->
+  <div class="intro-step hidden" id="step-name">
+    <div class="intro-card">
+      <div class="intro-warning-badge name">CHARACTER CREATION</div>
+      <!-- 닉네임 입력 -->
+      <h2 class="intro-title">당신은 누구입니까?</h2>
+      <p class="intro-desc">
+        이면 세계에서 불릴 이름을 입력하세요.
+      </p>
+      <div class="intro-input-wrap">
+        <input
+          type="text"
+          id="name-input"
+          placeholder="이름을 입력하세요..."
+          maxlength="12"
+          autocomplete="off"
+        />
+        <button onclick="submitName()">확인 ▶</button>
+      </div>
+    </div>
+  </div>
+
+</div>
 <!-- ================================================================
      일반 화면
 ================================================================ -->
@@ -863,6 +1081,114 @@
 </div>
 
 <script>
+  // ── 인트로 상태 ──────────────────────────────────────────────
+  // 인트로 스킵 (기존 유저)
+  function skipIntro() {
+    document.getElementById('intro-overlay').classList.add('hidden');
+  }
+
+  // ── 1단계: API 키 제출 ──────────────────────────────────────
+  function submitApiKey() {
+    const key = document.getElementById('api-key-input').value.trim();
+    if (!key.startsWith('gsk_')) {
+      shakeInput('api-key-input');
+      return;
+    }
+    localStorage.setItem('groqApiKey', key);
+    GROQ_API_KEY = key;
+
+    // 스토리 단계로 전환
+    switchStep('step-api', 'step-story');
+    startStoryTyping();
+  }
+
+  // ── 2단계: 스토리 타이핑 (나중에 수정하기) ────────────────────────────────────
+  const STORY_TEXT =
+    `2026년, 중앙대학교.\n\n` +
+    `캠퍼스 어딘가에 균열이 생겼다.\n` +
+    `겉으로 보기엔 평범한 건물들.\n` +
+    `하지만 그 이면엔 또 다른 세계가 존재한다.\n\n` +
+    `버그처럼 번지는 이상 현상들.\n` +
+    `학점귀신, 데드라인 악령, 그리고 정체불명의 존재들.\n\n` +
+    `중앙대 마스코트 푸앙이만이 이 세계의 비밀을 알고 있다.\n\n` +
+    `이제 선택받은 당신이 그 문을 열 차례다.`;
+
+  function startStoryTyping() {
+    const el = document.getElementById('story-text');
+    const nextBtn = document.getElementById('story-next-btn');
+    el.textContent = '';
+    let i = 0;
+
+    function step() {
+      if (i < STORY_TEXT.length) {
+        el.textContent += STORY_TEXT[i];
+        i++;
+        setTimeout(step, i < 60 ? 40 : 28); // 앞부분 살짝 느리게
+      } else {
+        nextBtn.style.display = 'block';
+      }
+    }
+    step();
+  }
+
+  // ── 3단계: 닉네임으로 이동 ─────────────────────────────────
+  function goToNameStep() {
+    switchStep('step-story', 'step-name');
+  }
+
+  // ── 닉네임 제출 ─────────────────────────────────────────────
+  function submitName() {
+    const name = document.getElementById('name-input').value.trim();
+    if (!name) {
+      shakeInput('name-input');
+      return;
+    }
+    localStorage.setItem('playerName', name);
+
+    // 오버레이 페이드아웃 후 게임 시작
+    const overlay = document.getElementById('intro-overlay');
+    overlay.style.transition = 'opacity 0.6s ease';
+    overlay.style.opacity = '0';
+    setTimeout(() => overlay.classList.add('hidden'), 600);
+  }
+
+  // ── 단계 전환 헬퍼 ──────────────────────────────────────────
+  function switchStep(fromId, toId) {
+    document.getElementById(fromId).classList.add('hidden');
+    document.getElementById(toId).classList.remove('hidden');
+  }
+
+  // ── 입력 오류 시 흔들기 ─────────────────────────────────────
+  function shakeInput(id) {
+    const el = document.getElementById(id);
+    el.style.borderColor = '#f09595';
+    el.style.animation = 'none';
+    setTimeout(() => {
+      el.style.animation = 'shake 0.3s ease';
+      setTimeout(() => {
+        el.style.animation = '';
+        el.style.borderColor = '';
+      }, 300);
+    }, 10);
+  }
+
+  // Enter 키 지원
+  document.addEventListener('DOMContentLoaded', () => {
+    // localStorage에서 기존 데이터 확인 (재방문 시 인트로 스킵)
+    const savedKey  = localStorage.getItem('groqApiKey');
+    const savedName = localStorage.getItem('playerName');
+    if (savedKey && savedName) {
+      GROQ_API_KEY = savedKey;
+      skipIntro();
+    }
+
+    // 신규 유저 등록
+    document.getElementById('api-key-input')
+      ?.addEventListener('keydown', e => { if (e.key === 'Enter') submitApiKey(); });
+    document.getElementById('name-input')
+      ?.addEventListener('keydown', e => { if (e.key === 'Enter') submitName(); });
+  });
+
   // ── 맵 장소 데이터 ──
   const placeInfo = {
     dormitory:         { label: '블루미르홀',     desc: '푸앙 수호신과 대화하고 호감도를 올려보세요!',        locked: false },
@@ -1530,13 +1856,6 @@
   }
 
   // ── 채팅 전송 ──
-  // ================================================================
-  // sendChat() — Groq API 직접 호출 버전
-  // 나중에 키 숨길 때: 이 fetch 주소만 Cloudflare Workers URL로 교체
-  // ================================================================
-
-  const GROQ_API_KEY = 'gsk_여기에_키_입력';
-
   // 호감도 → 푸앙이 말투 지시 (프롬프트에 삽입)
   function getFavorLabel(fav) {
     if (fav >= 80) return '매우 친근하고 애정 넘치게, 별명 부르기 가능';
