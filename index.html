@@ -1500,8 +1500,9 @@
   // ================================================================
   // 전투 화면 로직
   // ================================================================
-  let battlePlayerHp = 80, battlePlayerMaxHp = 100;
-  let enemyHp = 60, enemyMaxHp = 60;
+  // 일단 플레이어 관련 수치는 고정값 (데모), 나중에 아이템이나 레벨 업 등으로 수치 변경 가능
+  let battlePlayerHp = 80, battlePlayerMaxHp = 100;  
+  let enemyHp = 60, enemyMaxHp = 60;  // 몬스터 HP는 고정. 디버프 등에 따라 변경 가능
   let battleTurn = 1;
   let buffActive = false;
   let battleBusy = false;
